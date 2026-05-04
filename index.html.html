@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人性之境：古聖先賢的靈魂考驗</title>
+    <style>
+        :root {
+            --primary-color: #2c2c2c;
+            --accent-color: #a67c52;
+            --bg-color: #f2ede4;
+            --ink-color: #1a1a1a;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: "PingFang TC", "Noto Serif TC", serif;
+            background-color: var(--bg-color);
+            color: var(--ink-color);
+            overflow-x: hidden;
+        }
+
+        /* 奇幻背景裝飾 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        /* 首頁開場 */
+        #landing-page {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.05) 100%);
+            transition: opacity 1s ease;
+        }
+
+        .title-box {
+            border: 2px solid var(--ink-color);
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .title-box::before, .title-box::after {
+            content: "◆";
+            position: absolute;
+            top: -12px;
+            background: var(--bg-color);
+            padding: 0 10px;
+        }
+
+        .intro-text {
+            max-width: 500px;
+            font-size: 1.1rem;
+            line-height: 2;
+            letter-spacing: 2px;
+            color: #555;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .start-btn {
+            background: var(--ink-color);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            letter-spacing: 5px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .start-btn:hover {
+            background: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        /* 測驗區域 */
+        #quiz-wrapper {
+            display: none;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .quiz-step {
+            background: white;
+            padding: 40px;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            background: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-left: 5px solid var(--accent-color);
+            background: #fdfaf5;
+        }
+
+        /* 結果顯示 */
+        #result-area {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border: 2px double var(--accent-color);
+        }
+
+        /* 背景音樂控制 */
+        #music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 100;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 背景音樂 (這裡使用一個開放源碼的古風鋼琴音檔作為範例) -->
+<audio id="bgm" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
+</audio>
+
+<div id="music-control" onclick="toggleMusic()">🎵</div>
+
+<!-- 第一階段：奇幻前導頁 -->
+<div id="landing-page">
+    <div class="title-box">
+        <h1 style="margin:0; font-size: 2.5rem;">人性之境</h1>
+        <p style="letter-spacing: 10px; margin-top:10px;">靈 魂 考 驗</p>
+    </div>
+    <div class="intro-text">
+        「混沌伊始，人心如白絹，亦如奔泉。<br>
+        在善與惡的交界處，隱藏著三位古老先賢的殘影。<br>
+        穿過迷霧，你的每一個決擇，<br>
+        都將喚醒沉睡在你命運深處的靈魂真相...」
+    </div>
+    <button class="start-btn" onclick="startQuiz()">叩門入徑</button>
+</div>
+
+<!-- 第二階段：測驗內容 -->
+<div id="quiz-wrapper">
+    <div id="quiz-container"></div>
+    <div id="result-area">
+        <h2 style="color:var(--accent-color)">—— 靈魂歸宿 ——</h2>
+        <div id="result-content"></div>
+        <button class="start-btn" onclick="location.reload()" style="margin-top:30px; font-size:1rem;">重啟輪迴</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "看到有人跌倒，你的第一反應是？", options: ["立刻衝過去扶（幾乎沒經過思考）", "想一下再決定要不要幫", "看情況（環境、安全、他人反應）"], keys: ["A", "B", "C"] },
+        { q: "你認為「善良」比較像什麼？", options: ["天生就有", "後天學來的", "看環境而定"], keys: ["A", "B", "C"] },
+        { q: "如果一個人做好事是為了被稱讚？", options: ["那不算真正的善", "沒關係，有做好事就好", "要看他之後會不會改變"], keys: ["A", "B", "C"] },
+        { q: "政府推好政策但只是為了選票，你怎麼看？", options: ["動機不純，不能算真正的仁政", "有幫助就好，動機不重要", "要看長期效果"], keys: ["A", "B", "C"] },
+        { q: "你分享筆記給同學，心裡希望他回報", options: ["這樣就不算真正幫助", "很正常，人都會這樣", "看情況，不一定"], keys: ["A", "B", "C"] },
+        { q: "如果沒有人會知道你做了好事，你還會做嗎？", options: ["會，因為本來就想做", "不一定，要看情況", "可能不會"], keys: ["A", "C", "B"] },
+        { q: "小孩需要被教才會變好嗎？", options: ["不用，本來就有善性", "一定需要教育", "有些需要，有些不用"], keys: ["A", "B", "C"] },
+        { q: "你覺得「習慣行善」久了會怎樣？", options: ["只是表面，不一定真心", "會真的變善良", "不一定，因人而異"], keys: ["A", "B", "C"] },
+        { q: "面對誘惑時，人會怎樣？", options: ["內心會自然抗拒", "容易被影響，需要克制", "不一定，這要看人"], keys: ["A", "B", "C"] },
+        { q: "你認為「好人」最重要的是？", options: ["真心", "行為", "視當下情境而定"], keys: ["A", "B", "C"] }
+    ];
+
+    let currentStep = 0;
+    let scores = { A: 0, B: 0, C: 0 };
+    const bgm = document.getElementById('bgm');
+
+    function toggleMusic() {
+        if (bgm.paused) bgm.play();
+        else bgm.pause();
+    }
+
+    function startQuiz() {
+        bgm.play(); // 點擊開始時啟動音樂
+        document.getElementById('landing-page').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('quiz-wrapper').style.display = 'block';
+            renderQuestion();
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        if (currentStep >= questions.length) {
+            showResult();
+            return;
+        }
+        const qData = questions[currentStep];
+        let optionsHtml = qData.options.map((opt, i) => 
+            `<button class="option-btn" onclick="nextStep('${qData.keys[i]}')">${opt}</button>`
+        ).join('');
+
+        document.getElementById('quiz-container').innerHTML = `
+            <div class="quiz-step">
+                <div style="color:#aaa; margin-bottom:10px;">— 其之 ${currentStep + 1} —</div>
+                <div class="question-text">${qData.q}</div>
+                ${optionsHtml}
+            </div>
+        `;
+    }
+
+    function nextStep(key) {
+        scores[key]++;
+        currentStep++;
+        renderQuestion();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-container').style.display = 'none';
+        const resultArea = document.getElementById('result-area');
+        resultArea.style.display = 'block';
+
+        let maxKey = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        let content = "";
+
+        if (maxKey === 'A') {
+            content = `<h3>孟子：由仁義行</h3><p>你擁有一顆赤子之心，相信良知是與生俱來的光芒。在你眼中，真誠的動機遠比華麗的結果重要。</p>`;
+        } else if (maxKey === 'B') {
+            content = `<h3>荀子：化性起偽</h3><p>你深知人性的複雜，相信美德是修行的結果。你重視規範、秩序與實際的影響力，是位理性的踐行者。</p>`;
+        } else {
+            content = `<h3>告子：性如湍水</h3><p>你如流水般不拘泥於定見，深諳環境對人的形塑。對你而言，善惡並非絕對，而是與時俱進的智慧選擇。</p>`;
+        }
+        document.getElementById('result-content').innerHTML = content;
+    }
+</script>
+
+</body>
+</html>
