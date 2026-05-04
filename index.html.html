@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
     <title>人性之境：古聖先賢的靈魂考驗</title>
     <style>
         :root {
@@ -13,14 +16,15 @@
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: "PingFang TC", "Noto Serif TC", serif;
-            background-color: var(--bg-color);
-            color: var(--ink-color);
-            overflow-x: hidden;
-        }
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* 優先使用載入的宋體，若沒網路則使用系統預設 */
+    font-family: 'Noto Serif TC', serif; 
+    background-color: var(--bg-color);
+    color: var(--ink-color);
+    overflow-x: hidden;
+}
 
         /* 奇幻背景裝飾 */
         body::before {
