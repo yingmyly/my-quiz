@@ -16,15 +16,15 @@
         }
 
         body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    /* 優先使用載入的宋體，若沒網路則使用系統預設 */
-    font-family: 'Noto Serif TC', serif; 
-    background-color: var(--bg-color);
-    color: var(--ink-color);
-    overflow-x: hidden;
-}
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            /* 全面套用宋體，增加古風質感 */
+            font-family: 'Noto Serif TC', serif; 
+            background-color: var(--bg-color);
+            color: var(--ink-color);
+            overflow-x: hidden;
+        }
 
         /* 奇幻背景裝飾 */
         body::before {
@@ -66,10 +66,10 @@
 
         .intro-text {
             max-width: 500px;
-            font-size: 1.1rem;
-            line-height: 2;
+            font-size: 1.2rem; /* 手機端微調大一點 */
+            line-height: 2.2;
             letter-spacing: 2px;
-            color: #555;
+            color: #444;
             margin-bottom: 40px;
             padding: 0 20px;
         }
@@ -84,6 +84,7 @@
             letter-spacing: 5px;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-family: 'Noto Serif TC', serif;
         }
 
         .start-btn:hover {
@@ -91,11 +92,52 @@
             transform: scale(1.05);
         }
 
+        /* 詩意進度條 */
+        .progress-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            display: none; /* 初始隱藏，開始測驗才顯示 */
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .progress-bar {
+            height: 1px;
+            background: rgba(166, 124, 82, 0.2);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: "●";
+            position: absolute;
+            right: -5px;
+            top: -10px;
+            font-size: 12px;
+            color: var(--accent-color);
+            text-shadow: 0 0 8px rgba(166, 124, 82, 0.5);
+        }
+
         /* 測驗區域 */
         #quiz-wrapper {
             display: none;
             max-width: 600px;
-            margin: 50px auto;
+            margin: 20px auto;
             padding: 20px;
         }
 
@@ -103,8 +145,8 @@
             background: white;
             padding: 40px;
             border-radius: 2px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid #ddd;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
             position: relative;
         }
 
@@ -113,6 +155,7 @@
             margin-bottom: 30px;
             font-weight: bold;
             color: var(--primary-color);
+            line-height: 1.5;
         }
 
         .option-btn {
@@ -124,6 +167,7 @@
             background: #fff;
             cursor: pointer;
             font-size: 1rem;
+            font-family: 'Noto Serif TC', serif;
             transition: all 0.2s;
         }
 
@@ -158,14 +202,12 @@
 </head>
 <body>
 
-<!-- 背景音樂 (這裡使用一個開放源碼的古風鋼琴音檔作為範例) -->
 <audio id="bgm" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
 </audio>
 
 <div id="music-control" onclick="toggleMusic()">🎵</div>
 
-<!-- 第一階段：奇幻前導頁 -->
 <div id="landing-page">
     <div class="title-box">
         <h1 style="margin:0; font-size: 2.5rem;">人性之境</h1>
@@ -180,9 +222,16 @@
     <button class="start-btn" onclick="startQuiz()">叩門入徑</button>
 </div>
 
-<!-- 第二階段：測驗內容 -->
 <div id="quiz-wrapper">
+    <div class="progress-container" id="p-container">
+        <div class="progress-text" id="progress-desc">初入迷途...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+    </div>
+
     <div id="quiz-container"></div>
+    
     <div id="result-area">
         <h2 style="color:var(--accent-color)">—— 靈魂歸宿 ——</h2>
         <div id="result-content"></div>
@@ -214,11 +263,12 @@
     }
 
     function startQuiz() {
-        bgm.play(); // 點擊開始時啟動音樂
+        bgm.play();
         document.getElementById('landing-page').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('landing-page').style.display = 'none';
             document.getElementById('quiz-wrapper').style.display = 'block';
+            document.getElementById('p-container').style.display = 'block';
             renderQuestion();
         }, 1000);
     }
@@ -228,6 +278,19 @@
             showResult();
             return;
         }
+
+        // 詩意進度文字
+        const progressTexts = [
+            "初入迷途...", "步履漸深...", "心隨境轉...", "思辨真偽...", 
+            "探尋本心...", "獨行荒野...", "啟迪靈知...", "漸見曙光...", 
+            "終抵彼岸...", "靈魂定錨..."
+        ];
+        document.getElementById('progress-desc').innerText = progressTexts[currentStep] || "靈魂拷問中...";
+        
+        // 更新進度條
+        const progressPercent = ((currentStep + 1) / questions.length) * 100;
+        document.getElementById('progress').style.width = progressPercent + '%';
+
         const qData = questions[currentStep];
         let optionsHtml = qData.options.map((opt, i) => 
             `<button class="option-btn" onclick="nextStep('${qData.keys[i]}')">${opt}</button>`
@@ -235,7 +298,7 @@
 
         document.getElementById('quiz-container').innerHTML = `
             <div class="quiz-step">
-                <div style="color:#aaa; margin-bottom:10px;">— 其之 ${currentStep + 1} —</div>
+                <div style="color:#aaa; margin-bottom:10px; font-size:0.9rem;">— 其之 ${currentStep + 1} —</div>
                 <div class="question-text">${qData.q}</div>
                 ${optionsHtml}
             </div>
@@ -250,6 +313,7 @@
 
     function showResult() {
         document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('p-container').style.display = 'none';
         const resultArea = document.getElementById('result-area');
         resultArea.style.display = 'block';
 
